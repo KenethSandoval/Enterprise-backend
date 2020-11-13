@@ -17,26 +17,26 @@ export const listEmployee: Handler = async (req, res) => {
 }
 
 export const saveEmployee: Handler = async (req, res) => {
-  
-  const { name, lastname, charge, department, phoneNumber, email, enterprise } = req.body;
+  const id = req.user.id;
+  const  { email } = req.body;
+  try {
+    const employee = new Employee({ 
+      enterprise: id,
+      ...req.body
+    });
+    const employeeFind = await Employee.findOne({ email });
 
-  if (name && email && charge && phoneNumber && department && lastname && enterprise) {
-    try {
-      const employee = new Employee({ name, lastname, charge, department, phoneNumber, email, enterprise });
-      const employeeFind = await Employee.findOne({ email });
-
-      if (employeeFind) {
-        return error(res, 'Employee already exists', 400);
-      } else {
-        await employee.save();
-        return success(res, employee, 201);
-      }
-    } catch (err) {
-      return error(res, err.message, 500);
+    if (employeeFind) {
+      return error(res, 'Employee already exists', 400);
+    } else {
+      console.log(id);
+      await employee.save();
+      return success(res, employee, 201);
     }
-  } else {
-    return error(res, 'Enter all data', 400);
+  } catch (err) {
+    return error(res, err.message, 500);
   }
+
 }
 
 export const removeEmployee: Handler = async (req, res) => {
@@ -53,9 +53,14 @@ export const removeEmployee: Handler = async (req, res) => {
 
 export const updateEmployee: Handler = async (req, res) => {
   const { _id } = req.body;
+  const enterprise = req.user.id;
 
   try {
-    const employeeUpdated = await Employee.findByIdAndUpdate(_id, req.body, { new: true });
+    const employeeChanges = {
+      ...req.body,
+      enterprise
+    }
+    const employeeUpdated = await Employee.findByIdAndUpdate(_id, employeeChanges, { new: true });
 
     !employeeUpdated ? error(res, 'Employee not found', 404) : success(res, employeeUpdated, 200);
 
