@@ -10,9 +10,4 @@ router.route('/employee')
     .delete(authMiddleware, removeEmployee)
     .put(authMiddleware, updateEmployee)
 
-/*
-router.put('/employees/:id', employeeController.editeEmployee);
-router.get('/findEmployee', employeeController.findEmployee);
-router.get('/employeesTotal', employeeController.totalEmployees);*/
-
 export default router;

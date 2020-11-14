@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const employeeSchema: Schema<IEmployeeSchema> = new Schema<IEmployeeSchema>({
+const employeeSchema: Schema = new Schema({
     name: {
         required: true,
         type: String
