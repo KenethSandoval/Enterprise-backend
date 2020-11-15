@@ -10,7 +10,7 @@ interface IEmployeeSchema extends TMongoDocument {
     department: string,
     phoneNumber: number,
     email: string
-    enterprise: TMongoId
+    enterprise: TMongoId[]
 }
 
 interface IEnterpriseSchema extends TMongoDocument {

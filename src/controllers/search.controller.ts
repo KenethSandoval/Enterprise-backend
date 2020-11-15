@@ -17,16 +17,28 @@ export const search: Handler = async (req, res) => {
 export const collectionDocument: Handler = async (req, res) => {
     const collection = req.params.document;
     const search = req.params.filter;
-    const regex = new RegExp(search, 'i');
-    let data: any = [];
 
-    switch (collection) {
-        case 'employee':
-            data = Employee.find({ name: regex });
-            break;
+    try {
+        const regex = new RegExp(search, 'i');
 
-        default:
-            return error(res, 'The collection does not exist', 400);
+        switch (collection) {
+            case 'employee':
+                const employee = await Employee.find({ name: regex })
+                    .populate('enterprise', 'nameEnterprise address');
+                
+                employee.length > 0 ? success(res, employee, 200) : error(res, 'Employee not found', 404);
+                
+                break;
+            case 'enterprise':
+                const enterprise = await Enterprise.find({ nameEnterprise: regex });
+                enterprise.length > 0 ? success(res, enterprise, 200) : error(res, 'Enterprise not found', 404);
+                break;
+
+            default:
+                return error(res, 'The collection does not exist', 400);
+        }
+    } catch (err) {
+        return error(res, err.message, 500);
     }
-    return success(res, data , 200);
+
 }
