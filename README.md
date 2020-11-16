@@ -13,6 +13,5 @@ Backend to take the management of your employees in the company and to use with 
 * TOKEN_EXPIRY_TIME=
 
 ## endpoints 
-``` html
-<a href="https://documenter.getpostman.com/view/10052881/TVepAohs"></a>
-```
+[endpoints](https://documenter.getpostman.com/view/10052881/TVepAohs)
+
