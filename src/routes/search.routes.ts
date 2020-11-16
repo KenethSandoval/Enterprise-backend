@@ -5,9 +5,9 @@ import authMiddleware from '../middlewares/auth.middleware'
 const router = Router();
 
 router.route('/:filter')
-    .get(search)
+    .get(authMiddleware, search)
 
 router.route('/collection/:document/:filter')
-    .get(collectionDocument)
+    .get(authMiddleware, collectionDocument)
 
 export default router;

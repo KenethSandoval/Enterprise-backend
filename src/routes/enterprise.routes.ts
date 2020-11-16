@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { saveEnterprise, listEnterprise, login, removeEnterprise, updateEnterprse } from '../controllers/enterprise.controller';
+import {
+    saveEnterprise, 
+    listEnterprise, 
+    login,
+    removeEnterprise, 
+    updateEnterprse
+ } from '../controllers/enterprise.controller';
 import authMiddleware from '../middlewares/auth.middleware';
 
 const router = Router();

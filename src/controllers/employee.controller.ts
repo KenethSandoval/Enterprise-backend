@@ -1,10 +1,14 @@
 import Employee from '../models/employee.model';
 import { success, error } from '../utils/response';
+import { getPages } from '../utils/pages';
 
 export const listEmployee: Handler = async (req, res) => {
   try {
+    const { limit, skip } = getPages(req.query.page as string, Number(req.query.limit));
+
     const employee = await Employee.find()
-      .populate('enterprise', 'nameEnterprise address');
+      .populate('enterprise', 'nameEnterprise address')
+      .limit(limit).skip(skip).exec()
 
     if (employee.length === 0) {
       return error(res, 'No employees', 400);
@@ -18,9 +22,9 @@ export const listEmployee: Handler = async (req, res) => {
 
 export const saveEmployee: Handler = async (req, res) => {
   const id = req.user.id;
-  const  { email } = req.body;
+  const { email } = req.body;
   try {
-    const employee = new Employee({ 
+    const employee = new Employee({
       enterprise: id,
       ...req.body
     });

@@ -1,13 +1,13 @@
 import { generateAndSignToken } from '../services/jwt';
 import Enterprise from '../models/enterprise.model';
 import { success, error } from '../utils/response';
+import { getPages } from '../utils/pages';
 
 export const saveEnterprise: Handler = async (req, res) => {
   const { nameEnterprise, phone, email, address, password } = req.body;
-
   if (nameEnterprise && phone && email && address && password) {
     try {
-      const enterprise = new Enterprise({ nameEnterprise, phone, email, address, password });
+      const enterprise = new Enterprise(req.body);
       await enterprise.setPassword(password);
 
       const enterpriseFind = await Enterprise.findOne({
@@ -19,24 +19,28 @@ export const saveEnterprise: Handler = async (req, res) => {
       });
 
       if (enterpriseFind) {
-        return error(res, 'Employee already exists', 400);
+        return error(res, 'Enterprise already exists', 400);
       } else {
         const newEnterprise = await enterprise.save();
         const token = await generateAndSignToken({ user: { id: newEnterprise.id } });
         return success(res, token, 201);
       }
-
     } catch (err) {
       return error(res, err.message, 500);
     }
   } else {
     return error(res, 'Enter all data', 400);
+
   }
 }
 
 export const listEnterprise: Handler = async (req, res) => {
   try {
-    const enterprise = await Enterprise.find();
+    const { limit, skip } = getPages(req.query.page as string, Number(req.query.limit));
+
+    const enterprise = await Enterprise.find()
+      .limit(limit).skip(skip).exec()
+
     if (enterprise.length === 0) {
       return error(res, 'No companies', 404);
     } else {
