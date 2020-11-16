@@ -7,10 +7,12 @@ Backend to take the management of your employees in the company and to use with 
     npm run dev
 ```
 ## .env
-PORT=
-MONGODB_URI=
-JWT_SECRET=
-TOKEN_EXPIRY_TIME=
+* PORT=
+* MONGODB_URI=
+* JWT_SECRET=
+* TOKEN_EXPIRY_TIME=
 
 ## endpoints 
+``` html
 <a href="https://documenter.getpostman.com/view/10052881/TVepAohs"></a>
+```
